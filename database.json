@@ -1,0 +1,1877 @@
+{
+  "users": [
+    {
+      "id": "usr_admin",
+      "fullName": "Alpha Admin Office",
+      "mobileNumber": "9988776655",
+      "email": "admin@thealpha.com",
+      "role": "admin",
+      "password": "admin",
+      "createdAt": "2026-06-06T14:40:14.213Z"
+    },
+    {
+      "id": "usr_member1",
+      "fullName": "Rohan Keshri",
+      "mobileNumber": "9876543210",
+      "email": "rohankeshri81@gmail.com",
+      "role": "user",
+      "password": "password123",
+      "createdAt": "2026-06-06T14:40:14.214Z"
+    }
+  ],
+  "bookings": [
+    {
+      "id": "bk_1",
+      "invoiceNumber": "ALPH-202606-1001",
+      "userId": "usr_member1",
+      "userEmail": "rohankeshri81@gmail.com",
+      "userName": "Rohan Keshri",
+      "userMobile": "9876543210",
+      "category": "gym",
+      "planId": "gym_yearly",
+      "planName": "Yearly Ultimate Alpha",
+      "amount": 13000,
+      "gstAmount": 2340,
+      "totalAmount": 15340,
+      "paymentMethod": "upi",
+      "paymentDate": "2026-06-01T12:00:00Z",
+      "paymentStatus": "success",
+      "startDate": "2026-06-01",
+      "endDate": "2027-06-01",
+      "gymDetails": {
+        "dob": "2000-01-01",
+        "emergencyContact": "9112233445"
+      }
+    },
+    {
+      "id": "bk_2",
+      "invoiceNumber": "ALPH-202606-1002",
+      "userId": "usr_member1",
+      "userEmail": "rohankeshri81@gmail.com",
+      "userName": "Rohan Keshri",
+      "userMobile": "9876543210",
+      "category": "library",
+      "planId": "lib_monthly",
+      "planName": "Monthly Scholar",
+      "amount": 1500,
+      "gstAmount": 270,
+      "totalAmount": 1770,
+      "paymentMethod": "card",
+      "paymentDate": "2026-06-03T14:30:00Z",
+      "paymentStatus": "success",
+      "startDate": "2026-06-03",
+      "endDate": "2026-07-03",
+      "libraryDetails": {
+        "seatNumber": "A5",
+        "collegeName": "Alpha State University",
+        "idProofName": "National ID Proof"
+      }
+    }
+  ],
+  "seats": [
+    {
+      "id": "seat_1",
+      "number": "1",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_2",
+      "number": "2",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_3",
+      "number": "3",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_4",
+      "number": "4",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_5",
+      "number": "5",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_6",
+      "number": "6",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_7",
+      "number": "7",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_8",
+      "number": "8",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_9",
+      "number": "9",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_10",
+      "number": "10",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_11",
+      "number": "11",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_12",
+      "number": "12",
+      "isBooked": true,
+      "bookedBy": "Scholar #12",
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_13",
+      "number": "13",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_14",
+      "number": "14",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_15",
+      "number": "15",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_16",
+      "number": "16",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_17",
+      "number": "17",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_18",
+      "number": "18",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_19",
+      "number": "19",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_20",
+      "number": "20",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_21",
+      "number": "21",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_22",
+      "number": "22",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_23",
+      "number": "23",
+      "isBooked": true,
+      "bookedBy": "Scholar #23",
+      "isPermanent": false,
+      "lockerNumber": "L-33",
+      "lockerType": "small"
+    },
+    {
+      "id": "seat_24",
+      "number": "24",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_25",
+      "number": "25",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_26",
+      "number": "26",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_27",
+      "number": "27",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_28",
+      "number": "28",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_29",
+      "number": "29",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_30",
+      "number": "30",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_31",
+      "number": "31",
+      "isBooked": true,
+      "bookedBy": "Scholar #31",
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_32",
+      "number": "32",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_33",
+      "number": "33",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_34",
+      "number": "34",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_35",
+      "number": "35",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_36",
+      "number": "36",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_37",
+      "number": "37",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_38",
+      "number": "38",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_39",
+      "number": "39",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_40",
+      "number": "40",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_41",
+      "number": "41",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_42",
+      "number": "42",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_43",
+      "number": "43",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_44",
+      "number": "44",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_45",
+      "number": "45",
+      "isBooked": true,
+      "bookedBy": "Scholar #45",
+      "isPermanent": true,
+      "lockerNumber": "L-55",
+      "lockerType": "small"
+    },
+    {
+      "id": "seat_46",
+      "number": "46",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_47",
+      "number": "47",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_48",
+      "number": "48",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_49",
+      "number": "49",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_50",
+      "number": "50",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_51",
+      "number": "51",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_52",
+      "number": "52",
+      "isBooked": true,
+      "bookedBy": "Scholar #52",
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_53",
+      "number": "53",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_54",
+      "number": "54",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_55",
+      "number": "55",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_56",
+      "number": "56",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_57",
+      "number": "57",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_58",
+      "number": "58",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_59",
+      "number": "59",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_60",
+      "number": "60",
+      "isBooked": true,
+      "bookedBy": "Scholar #60",
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_61",
+      "number": "61",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_62",
+      "number": "62",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_63",
+      "number": "63",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_64",
+      "number": "64",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_65",
+      "number": "65",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_66",
+      "number": "66",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_67",
+      "number": "67",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_68",
+      "number": "68",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_69",
+      "number": "69",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_70",
+      "number": "70",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_71",
+      "number": "71",
+      "isBooked": true,
+      "bookedBy": "Scholar #71",
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_72",
+      "number": "72",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_73",
+      "number": "73",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_74",
+      "number": "74",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_75",
+      "number": "75",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_76",
+      "number": "76",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_77",
+      "number": "77",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_78",
+      "number": "78",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_79",
+      "number": "79",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_80",
+      "number": "80",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_81",
+      "number": "81",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_82",
+      "number": "82",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_83",
+      "number": "83",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_84",
+      "number": "84",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_85",
+      "number": "85",
+      "isBooked": true,
+      "bookedBy": "Scholar #85",
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_86",
+      "number": "86",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_87",
+      "number": "87",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_88",
+      "number": "88",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_89",
+      "number": "89",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_90",
+      "number": "90",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_91",
+      "number": "91",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_92",
+      "number": "92",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_93",
+      "number": "93",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_94",
+      "number": "94",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_95",
+      "number": "95",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_96",
+      "number": "96",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_97",
+      "number": "97",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_98",
+      "number": "98",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_99",
+      "number": "99",
+      "isBooked": true,
+      "bookedBy": "Scholar #99",
+      "isPermanent": false,
+      "lockerNumber": "L-109",
+      "lockerType": "small"
+    },
+    {
+      "id": "seat_100",
+      "number": "100",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_101",
+      "number": "101",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_102",
+      "number": "102",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_103",
+      "number": "103",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_104",
+      "number": "104",
+      "isBooked": true,
+      "bookedBy": "Scholar #104",
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_105",
+      "number": "105",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_106",
+      "number": "106",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_107",
+      "number": "107",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_108",
+      "number": "108",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_109",
+      "number": "109",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_110",
+      "number": "110",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_111",
+      "number": "111",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_112",
+      "number": "112",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_113",
+      "number": "113",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_114",
+      "number": "114",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_115",
+      "number": "115",
+      "isBooked": true,
+      "bookedBy": "Scholar #115",
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_116",
+      "number": "116",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_117",
+      "number": "117",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_118",
+      "number": "118",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_119",
+      "number": "119",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_120",
+      "number": "120",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_121",
+      "number": "121",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_122",
+      "number": "122",
+      "isBooked": true,
+      "bookedBy": "Scholar #122",
+      "isPermanent": true,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_123",
+      "number": "123",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_124",
+      "number": "124",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_125",
+      "number": "125",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_126",
+      "number": "126",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_127",
+      "number": "127",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_128",
+      "number": "128",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_129",
+      "number": "129",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_130",
+      "number": "130",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_131",
+      "number": "131",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_132",
+      "number": "132",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_133",
+      "number": "133",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_134",
+      "number": "134",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_135",
+      "number": "135",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_136",
+      "number": "136",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_137",
+      "number": "137",
+      "isBooked": true,
+      "bookedBy": "Scholar #137",
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_138",
+      "number": "138",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_139",
+      "number": "139",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_140",
+      "number": "140",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_141",
+      "number": "141",
+      "isBooked": true,
+      "bookedBy": "Scholar #141",
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_142",
+      "number": "142",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_143",
+      "number": "143",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_144",
+      "number": "144",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_145",
+      "number": "145",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_146",
+      "number": "146",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_147",
+      "number": "147",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_148",
+      "number": "148",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_149",
+      "number": "149",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_150",
+      "number": "150",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_151",
+      "number": "151",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_152",
+      "number": "152",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_153",
+      "number": "153",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_154",
+      "number": "154",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_155",
+      "number": "155",
+      "isBooked": true,
+      "bookedBy": "Scholar #155",
+      "isPermanent": true,
+      "lockerNumber": "L-165",
+      "lockerType": "small"
+    },
+    {
+      "id": "seat_156",
+      "number": "156",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_157",
+      "number": "157",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_158",
+      "number": "158",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_159",
+      "number": "159",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_160",
+      "number": "160",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_161",
+      "number": "161",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_162",
+      "number": "162",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_163",
+      "number": "163",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_164",
+      "number": "164",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_165",
+      "number": "165",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_166",
+      "number": "166",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_167",
+      "number": "167",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_168",
+      "number": "168",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_169",
+      "number": "169",
+      "isBooked": true,
+      "bookedBy": "Scholar #169",
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_170",
+      "number": "170",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_171",
+      "number": "171",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_172",
+      "number": "172",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_173",
+      "number": "173",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_174",
+      "number": "174",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_175",
+      "number": "175",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_176",
+      "number": "176",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_177",
+      "number": "177",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_178",
+      "number": "178",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_179",
+      "number": "179",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_180",
+      "number": "180",
+      "isBooked": true,
+      "bookedBy": "Scholar #180",
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_181",
+      "number": "181",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_182",
+      "number": "182",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    },
+    {
+      "id": "seat_183",
+      "number": "183",
+      "isBooked": false,
+      "isPermanent": false,
+      "lockerType": "none"
+    }
+  ],
+  "gymPlans": [
+    {
+      "id": "gym_monthly",
+      "name": "Monthly Standard",
+      "duration": "Monthly",
+      "price": 1500,
+      "description": "Full Gym Access + Cardio section + Locker rooms"
+    },
+    {
+      "id": "gym_quarterly",
+      "name": "Quarterly Elite",
+      "duration": "Quarterly",
+      "price": 4000,
+      "description": "Full Gym Access + Personal Coach support (3 sessions) + Steam room"
+    },
+    {
+      "id": "gym_half_yearly",
+      "name": "Half-Yearly pro",
+      "duration": "Half-Yearly",
+      "price": 7500,
+      "description": "All-inclusive Elite access + Custom diet charts + Free supplement shaker"
+    },
+    {
+      "id": "gym_yearly",
+      "name": "Yearly Ultimate Alpha",
+      "duration": "Yearly",
+      "price": 13000,
+      "description": "VIP locker + Unlimited coaching + Gym merch kit + 2 guest passes every month"
+    }
+  ],
+  "libraryPlans": [
+    {
+      "id": "lib_monthly",
+      "name": "Monthly Standard",
+      "duration": "1 Month",
+      "price": 899,
+      "description": "Single-month access. Full study hours."
+    }
+  ],
+  "tournaments": [
+    {
+      "id": "asphalt_2026",
+      "name": "THE ALPHA ASPHALT LEGENDS CHAMPIONSHIP",
+      "game": "Asphalt Legends",
+      "entryFee": 200,
+      "description": "Gear up for high-octane racing at the elite level! Show off your nitro management, perfect drifts, and aggressive overtakes. Fight through heats and reach the podium to claim glory and cash rewards in Purnea's premium gaming colosseum.",
+      "bannerUrl": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80&w=1200",
+      "isActive": true,
+      "status": "open",
+      "createdAt": "2026-06-06T16:10:12.328Z"
+    }
+  ],
+  "settings": {
+    "chargeAdmissionFee": true
+  },
+  "gamingPlans": [
+    {
+      "id": "game_55_1p",
+      "screenSize": "55",
+      "players": 1,
+      "type": "hourly",
+      "name": "55\" Screen - 1 Player",
+      "originalPrice": 149,
+      "offerPrice": 79,
+      "isOfferActive": true,
+      "isEnabled": true
+    },
+    {
+      "id": "game_55_2p",
+      "screenSize": "55",
+      "players": 2,
+      "type": "hourly",
+      "name": "55\" Screen - 2 Players",
+      "originalPrice": 249,
+      "offerPrice": 129,
+      "isOfferActive": true,
+      "isEnabled": true
+    },
+    {
+      "id": "game_55_3p",
+      "screenSize": "55",
+      "players": 3,
+      "type": "hourly",
+      "name": "55\" Screen - 3 Players",
+      "originalPrice": 349,
+      "offerPrice": 179,
+      "isOfferActive": true,
+      "isEnabled": true
+    },
+    {
+      "id": "game_55_4p",
+      "screenSize": "55",
+      "players": 4,
+      "type": "hourly",
+      "name": "55\" Screen - 4 Players",
+      "originalPrice": 449,
+      "offerPrice": 229,
+      "isOfferActive": true,
+      "isEnabled": true
+    },
+    {
+      "id": "game_75_1p",
+      "screenSize": "75",
+      "players": 1,
+      "type": "hourly",
+      "name": "75\" Screen - 1 Player",
+      "originalPrice": 169,
+      "offerPrice": 89,
+      "isOfferActive": true,
+      "isEnabled": true
+    },
+    {
+      "id": "game_75_2p",
+      "screenSize": "75",
+      "players": 2,
+      "type": "hourly",
+      "name": "75\" Screen - 2 Players",
+      "originalPrice": 289,
+      "offerPrice": 149,
+      "isOfferActive": true,
+      "isEnabled": true
+    },
+    {
+      "id": "game_75_3p",
+      "screenSize": "75",
+      "players": 3,
+      "type": "hourly",
+      "name": "75\" Screen - 3 Players",
+      "originalPrice": 409,
+      "offerPrice": 209,
+      "isOfferActive": true,
+      "isEnabled": true
+    },
+    {
+      "id": "game_75_4p",
+      "screenSize": "75",
+      "players": 4,
+      "type": "hourly",
+      "name": "75\" Screen - 4 Players",
+      "originalPrice": 529,
+      "offerPrice": 269,
+      "isOfferActive": true,
+      "isEnabled": true
+    },
+    {
+      "id": "pass_55_15h",
+      "screenSize": "55",
+      "players": 1,
+      "type": "monthly",
+      "name": "55\" Screen Pass",
+      "originalPrice": 1199,
+      "offerPrice": 999,
+      "isOfferActive": true,
+      "isEnabled": true,
+      "gameplayTime": "15 Hours"
+    },
+    {
+      "id": "pass_75_15h",
+      "screenSize": "75",
+      "players": 1,
+      "type": "monthly",
+      "name": "75\" Screen Pass",
+      "originalPrice": 1499,
+      "offerPrice": 1199,
+      "isOfferActive": true,
+      "isEnabled": true,
+      "gameplayTime": "15 Hours"
+    }
+  ],
+  "cafeMenu": [
+    {
+      "id": "cafe_hot_coffee",
+      "name": "Hot Coffee",
+      "category": "Hot Beverages",
+      "price": 25,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_paneer_sandwich",
+      "name": "Paneer Sandwich",
+      "category": "Sandwiches",
+      "price": 100,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_cheese_paneer_sandwich",
+      "name": "Cheese Paneer Sandwich",
+      "category": "Sandwiches",
+      "price": 120,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_bread_pb",
+      "name": "Bread Peanut Butter",
+      "category": "Sandwiches",
+      "price": 35,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_maggie",
+      "name": "Maggie",
+      "category": "Quick Bites",
+      "price": 59,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_cheese_maggie",
+      "name": "Cheese Maggie",
+      "category": "Quick Bites",
+      "price": 69,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_french_fries",
+      "name": "French Fries",
+      "category": "Quick Bites",
+      "price": 49,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_chilli_garlic_potato",
+      "name": "Chilli Garlic Potato (10 Pcs)",
+      "category": "Quick Bites",
+      "price": 69,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_veggie_fry",
+      "name": "Veggie Fry (4 Pcs)",
+      "category": "Quick Bites",
+      "price": 79,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_potato_cheese_shots",
+      "name": "Potato Cheese Shots (8 Pcs)",
+      "category": "Quick Bites",
+      "price": 129,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_smiley",
+      "name": "Smiley (5 Pcs)",
+      "category": "Quick Bites",
+      "price": 69,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_coca_cola_sm",
+      "name": "Coca Cola Small",
+      "category": "Cold Drinks",
+      "price": 30,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_coca_cola_lg",
+      "name": "Coca Cola Large",
+      "category": "Cold Drinks",
+      "price": 40,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_sprite_sm",
+      "name": "Sprite Small",
+      "category": "Cold Drinks",
+      "price": 30,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_sprite_lg",
+      "name": "Sprite Large",
+      "category": "Cold Drinks",
+      "price": 40,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_kesar_pista_falooda",
+      "name": "Kesar Pista Falooda",
+      "category": "Falooda Specials",
+      "price": 69,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_mango_falooda",
+      "name": "Mango Falooda",
+      "category": "Falooda Specials",
+      "price": 69,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_rose_falooda",
+      "name": "Rose Falooda",
+      "category": "Rose Falooda",
+      "price": 69,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_strawberry_falooda",
+      "name": "Strawberry Falooda",
+      "category": "Strawberry Falooda",
+      "price": 69,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_blue_curacao",
+      "name": "Blue Curacao",
+      "category": "Mocktails",
+      "price": 69,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_dew_mojito",
+      "name": "Dew Mojito",
+      "category": "Mocktails",
+      "price": 69,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_paan_shot",
+      "name": "Paan Shot",
+      "category": "Mocktails",
+      "price": 69,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_green_apple",
+      "name": "Green Apple",
+      "category": "Mocktails",
+      "price": 69,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_khus",
+      "name": "Khus",
+      "category": "Mocktails",
+      "price": 69,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_lime_ice_tea",
+      "name": "Lime Ice Tea",
+      "category": "Mocktails",
+      "price": 69,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_kala_khatta",
+      "name": "Kala Khatta",
+      "category": "Mocktails",
+      "price": 69,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_grenadine",
+      "name": "Grenadine",
+      "category": "Mocktails",
+      "price": 69,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_kesar",
+      "name": "Kesar",
+      "category": "Mocktails",
+      "price": 69,
+      "isEnabled": true
+    },
+    {
+      "id": "cafe_kacha_aam",
+      "name": "Kacha Aam",
+      "category": "Mocktails",
+      "price": 69,
+      "isEnabled": true
+    }
+  ],
+  "banners": [
+    {
+      "id": "b_gaming_poster",
+      "title": "Gaming Price Poster",
+      "imageUrl": "https://images.unsplash.com/photo-1600861195091-690c92f1d2cc?auto=format&fit=crop&q=80&w=1200",
+      "type": "gaming",
+      "targetPage": "gaming",
+      "isActive": true,
+      "createdAt": "2026-06-06T15:22:28.763Z"
+    },
+    {
+      "id": "b_cafe_poster",
+      "title": "Food & Beverages Menu Poster",
+      "imageUrl": "https://images.unsplash.com/photo-1554118811-1e0d58224f24?auto=format&fit=crop&q=80&w=1200",
+      "type": "cafe",
+      "targetPage": "cafe",
+      "isActive": true,
+      "createdAt": "2026-06-06T15:22:28.763Z"
+    },
+    {
+      "id": "b_mocktail_poster",
+      "title": "Mocktail Menu Poster",
+      "imageUrl": "https://images.unsplash.com/photo-1513558161293-cdaf765ed2fd?auto=format&fit=crop&q=80&w=1199",
+      "type": "offer",
+      "targetPage": "homepage",
+      "isActive": true,
+      "createdAt": "2026-06-06T15:22:28.763Z"
+    }
+  ],
+  "visitorCount": 4782,
+  "gamingHighlightPhotos": [
+    {
+      "id": "photo_ps5_1",
+      "album": "Consoles",
+      "imageUrl": "https://images.unsplash.com/photo-1606144042614-b2417e99c4e3?auto=format&fit=crop&q=80&w=600",
+      "title": "PlayStation 5 DualSense Setup",
+      "isActive": true,
+      "createdAt": "2026-06-06T16:44:28.970Z"
+    },
+    {
+      "id": "photo_asphalt_match",
+      "album": "Tournaments",
+      "imageUrl": "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&q=80&w=600",
+      "title": "Alpha Asphalt Legends Grand Heats",
+      "isActive": true,
+      "createdAt": "2026-06-06T16:44:28.970Z"
+    },
+    {
+      "id": "photo_arena_lounge",
+      "album": "General",
+      "imageUrl": "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&q=80&w=600",
+      "title": "Modern Esports Lounge Arena",
+      "isActive": true,
+      "createdAt": "2026-06-06T16:44:28.970Z"
+    },
+    {
+      "id": "photo_mechanical_kbd",
+      "album": "Gear",
+      "imageUrl": "https://images.unsplash.com/photo-1587829741301-dc798b83add3?auto=format&fit=crop&q=80&w=600",
+      "title": "Mechanical RGB Hot-Swap Keyboard Deck",
+      "isActive": true,
+      "createdAt": "2026-06-06T16:44:28.970Z"
+    },
+    {
+      "id": "photo_gaming_rig",
+      "album": "Hardware",
+      "imageUrl": "https://images.unsplash.com/photo-1587202372775-e229f172b9d7?auto=format&fit=crop&q=80&w=600",
+      "title": "Alpha Custom Water-Cooled RTX Battle Station",
+      "isActive": true,
+      "createdAt": "2026-06-06T16:44:28.970Z"
+    }
+  ],
+  "gamingHighlightVideos": [
+    {
+      "id": "video_esports_shorts_pro",
+      "videoUrl": "https://youtube.com/shorts/dRceqL1G_wk?si=el8hXVenHLzur7LG",
+      "title": "Pro RGB Esports Arena Showdown",
+      "isFeatured": false,
+      "loop": true,
+      "isActive": true,
+      "createdAt": "2026-06-06T18:40:00.000Z"
+    },
+    {
+      "id": "video_gaming_lounge",
+      "videoUrl": "https://youtube.com/shorts/SN5yhdtdCP4?si=CKpF2TKhEtQzAo04",
+      "title": "The Alpha RGB Setup Arena",
+      "isFeatured": true,
+      "loop": true,
+      "isActive": true,
+      "createdAt": "2026-06-06T16:44:28.970Z"
+    },
+    {
+      "id": "video_gamer_action",
+      "videoUrl": "https://assets.mixkit.co/videos/preview/mixkit-hands-of-gamer-playing-with-controller-40076-large.mp4",
+      "title": "Grand Master Asphalt Cup Final",
+      "isFeatured": false,
+      "loop": true,
+      "isActive": true,
+      "createdAt": "2026-06-06T16:44:28.970Z"
+    },
+    {
+      "id": "video_valorant_lan",
+      "videoUrl": "https://assets.mixkit.co/videos/preview/mixkit-gamer-playing-first-person-shooter-video-game-40074-large.mp4",
+      "title": "Pro shooter tournament highlight clutch",
+      "isFeatured": false,
+      "loop": true,
+      "isActive": true,
+      "createdAt": "2026-06-06T16:44:28.970Z"
+    },
+    {
+      "id": "video_vr_cyber",
+      "videoUrl": "https://assets.mixkit.co/videos/preview/mixkit-vr-headset-gamer-in-isometric-shot-45524-large.mp4",
+      "title": "VR Cyberpunk Esports Arena Tour",
+      "isFeatured": false,
+      "loop": true,
+      "isActive": true,
+      "createdAt": "2026-06-06T16:44:28.970Z"
+    },
+    {
+      "id": "video_pc_bang",
+      "videoUrl": "https://assets.mixkit.co/videos/preview/mixkit-people-playing-at-a-pc-bang-gaming-center-40075-large.mp4",
+      "title": "Live LAN Area PC Bang Atmosphere",
+      "isFeatured": false,
+      "loop": true,
+      "isActive": true,
+      "createdAt": "2026-06-06T16:44:28.970Z"
+    }
+  ]
+}

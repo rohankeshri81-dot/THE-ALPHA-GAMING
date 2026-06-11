@@ -1,0 +1,6 @@
+{
+  "name": "THE ALPHA",
+  "description": "Premium Black and Gold multi-booking platform for Gym, Library, and Gaming Arena.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

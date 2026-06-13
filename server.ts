@@ -1301,9 +1301,9 @@ app.post("/api/bookings", (req, res) => {
     const itemsDescription = cafeItems.map((it: any) => `${it.name} (x${it.quantity})`).join(", ");
     productName = `Cafe Order | Current Items: ${itemsDescription || "Custom beverages"}`;
   } else if (category === "tournament") {
-    const teamName = tournamentDetails?.teamName || "N/A Teams";
-    const teamSize = tournamentDetails?.teamSize || "Single/Duo/Squad";
-    productName = `Championship Tournament: Asphalt Legends | Team: ${teamName} | Size: ${teamSize}`;
+    const tName = tournamentDetails?.tournamentName || planName || "Asphalt Legends 2026";
+    const pCity = tournamentDetails?.city || "N/A";
+    productName = `Tournament: ${tName} | Player: ${userName} | City: ${pCity}`;
   }
 
   const alphaBookingPayload = {
@@ -2586,7 +2586,24 @@ app.get("/api/admin/supabase-status", async (req, res) => {
 // -----------------------------------------------------
 
 // GET MEDIA HIGHLIGHTS FOR GAMING
-app.get("/api/gaming-highlights", (req, res) => {
+app.get("/api/gaming-highlights", async (req, res) => {
+  try {
+    const { data: supaVids, error } = await supabase.from("gaming_highlight_videos").select("*");
+    if (!error && supaVids && supaVids.length > 0) {
+      DB.gamingHighlightVideos = supaVids.map((v: any) => ({
+        id: v.id,
+        title: v.title,
+        videoUrl: v.video_url,
+        posterUrl: v.poster_url || "",
+        isFeatured: !!v.is_featured,
+        loop: !!v.loop,
+        isActive: !!v.is_active,
+        createdAt: v.created_at
+      }));
+    }
+  } catch (err: any) {
+    console.warn("Supabase load fallback:", err.message);
+  }
   res.json({
     stories: DB.gamingHighlightStories || [],
     photos: DB.gamingHighlightPhotos || [],
@@ -2701,19 +2718,47 @@ app.post("/api/admin/gaming-highlights/photos/delete", (req, res) => {
 });
 
 
+// HELPER TO SYNC HIGHLIGHT VIDEOS TO SUPABASE
+async function syncHighlightVideosToSupabase() {
+  try {
+    const list = DB.gamingHighlightVideos || [];
+    for (const v of list) {
+       await supabase.from("gaming_highlight_videos").upsert({
+         id: v.id,
+         title: v.title,
+         video_url: v.videoUrl,
+         poster_url: v.posterUrl || null,
+         is_featured: !!v.isFeatured,
+         loop: !!v.loop,
+         is_active: !!v.isActive,
+         created_at: v.createdAt || new Date().toISOString()
+       }, { onConflict: 'id' });
+    }
+  } catch (err: any) {
+    console.warn("Supabase highlights sync fallback active: ", err.message);
+  }
+}
+
 // ADMIN VIDEOS ENDPOINTS
 app.post("/api/admin/gaming-highlights/videos/add", async (req, res) => {
-  const { title, videoBase64, isFeatured, loop } = req.body;
+  const { title, videoBase64, posterBase64, isFeatured, loop } = req.body;
   if (!videoBase64) {
     return res.status(400).json({ error: "Missing video attachment file" });
   }
 
   try {
     const videoUrl = videoBase64.startsWith("http") ? videoBase64 : await uploadMediaToCloudinary(videoBase64, true);
+    
+    let posterUrl = "";
+    if (posterBase64) {
+      posterUrl = await uploadMediaToCloudinary(posterBase64, false);
+    }
+
     const newVideo = {
       id: "video_" + Math.random().toString(36).substring(2, 10),
       title: title || "Gameplay Reel",
       videoUrl,
+      posterUrl,
       isFeatured: !!isFeatured,
       loop: loop !== undefined ? !!loop : true,
       isActive: true,
@@ -2737,6 +2782,7 @@ app.post("/api/admin/gaming-highlights/videos/add", async (req, res) => {
     }
 
     saveDatabase();
+    await syncHighlightVideosToSupabase();
 
     res.json({ message: "Video added successfully", videos: DB.gamingHighlightVideos });
   } catch (e: any) {
@@ -2745,13 +2791,18 @@ app.post("/api/admin/gaming-highlights/videos/add", async (req, res) => {
 });
 
 app.post("/api/admin/gaming-highlights/videos/update", async (req, res) => {
-  const { id, title, videoBase64, isFeatured, loop, isActive } = req.body;
+  const { id, title, videoBase64, posterBase64, posterUrl, isFeatured, loop, isActive } = req.body;
   if (!id) return res.status(400).json({ error: "Missing Video ID" });
 
   try {
     let videoUrl;
     if (videoBase64) {
       videoUrl = await uploadMediaToCloudinary(videoBase64, true);
+    }
+
+    let uploadedPosterUrl;
+    if (posterBase64) {
+      uploadedPosterUrl = await uploadMediaToCloudinary(posterBase64, false);
     }
 
     DB.gamingHighlightVideos = DB.gamingHighlightVideos || [];
@@ -2770,7 +2821,8 @@ app.post("/api/admin/gaming-highlights/videos/update", async (req, res) => {
           loop: loop !== undefined ? !!loop : v.loop,
           isActive: isActive !== undefined ? !!isActive : v.isActive,
           isFeatured: isFeatured !== undefined ? !!isFeatured : v.isFeatured,
-          videoUrl: videoUrl || v.videoUrl
+          videoUrl: videoUrl || v.videoUrl,
+          posterUrl: uploadedPosterUrl || posterUrl || v.posterUrl || ""
         };
       }
       return v;
@@ -2786,13 +2838,15 @@ app.post("/api/admin/gaming-highlights/videos/update", async (req, res) => {
     }
 
     saveDatabase();
+    await syncHighlightVideosToSupabase();
+
     res.json({ message: "Video updated successfully", videos: DB.gamingHighlightVideos });
   } catch (e: any) {
     res.status(500).json({ error: e.message });
   }
 });
 
-app.post("/api/admin/gaming-highlights/videos/delete", (req, res) => {
+app.post("/api/admin/gaming-highlights/videos/delete", async (req, res) => {
   const { id } = req.body;
   if (!id) return res.status(400).json({ error: "Missing Video ID" });
 
@@ -2805,10 +2859,16 @@ app.post("/api/admin/gaming-highlights/videos/delete", (req, res) => {
   }
 
   saveDatabase();
+  try {
+    await supabase.from("gaming_highlight_videos").delete().eq("id", id);
+  } catch (err: any) {
+    console.warn("Could not delete highlight from Supabase:", err.message);
+  }
+
   res.json({ message: "Video deleted", videos: DB.gamingHighlightVideos });
 });
 
-app.post("/api/admin/gaming-highlights/videos/set-featured", (req, res) => {
+app.post("/api/admin/gaming-highlights/videos/set-featured", async (req, res) => {
   const { id } = req.body;
   if (!id) return res.status(400).json({ error: "Missing Video ID" });
 
@@ -2818,6 +2878,8 @@ app.post("/api/admin/gaming-highlights/videos/set-featured", (req, res) => {
   });
 
   saveDatabase();
+  await syncHighlightVideosToSupabase();
+
   res.json({ message: "Video set as featured", videos: DB.gamingHighlightVideos });
 });
 

@@ -186,6 +186,10 @@ export default function GymSection({
         <h2 className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
           THE ALPHA <span className="text-amber-400">GYM</span>
         </h2>
+        <div className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-amber-500/10 border border-amber-500/20 rounded-full text-amber-400 text-xxs font-mono tracking-wider uppercase font-bold">
+          <span>📞 Gym Contact:</span>
+          <a href="tel:7003008536" className="underline hover:text-white transition-colors">7003008536</a>
+        </div>
         <p className="text-xs text-zinc-400 font-sans tracking-wide leading-relaxed">
           Unlock your extreme human physical limits at our state-of-the-art training colosseum. Heavy weights, veteran coaching panels, advanced biomechanics testing, and elite recovery.
         </p>
@@ -238,10 +242,11 @@ export default function GymSection({
 
             {/* Configured Membership Plans */}
             <div className="space-y-4">
-              <div className="flex justify-between items-center px-1">
+              <div className="flex justify-between items-center px-1 gap-2 flex-wrap">
                 <h3 className="text-xs font-mono uppercase tracking-widest text-amber-500 font-semibold">
                   Step 2: Choose Membership Plan ({gender})
                 </h3>
+                <a href="tel:7003008536" className="text-[10px] font-mono text-zinc-500 hover:text-amber-400 font-semibold transition-colors">📞 Help: 7003008536</a>
               </div>
 
               <div className="space-y-3">
@@ -346,9 +351,12 @@ export default function GymSection({
 
           {/* STEP 2: REGISTRATION FORM */}
           <div className="lg:col-span-7 space-y-6">
-            <h3 className="text-xs font-mono uppercase tracking-widest text-amber-500 font-semibold">
-              Step 4: Athlete Registry & Credentials
-            </h3>
+            <div className="flex justify-between items-center gap-2 flex-wrap">
+              <h3 className="text-xs font-mono uppercase tracking-widest text-amber-500 font-semibold">
+                Step 4: Athlete Registry & Credentials
+              </h3>
+              <a href="tel:7003008536" className="text-[10px] font-mono text-zinc-500 hover:text-amber-450 font-bold transition-all">📞 Gym Contact: 7003008536</a>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
               

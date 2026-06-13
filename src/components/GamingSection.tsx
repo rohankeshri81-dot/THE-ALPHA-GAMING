@@ -205,7 +205,7 @@ export default function GamingSection({
   const [storyProgress, setStoryProgress] = useState(0);
   const [likedReels, setLikedReels] = useState<Record<string, boolean>>({});
   const [reelsLikes, setReelsLikes] = useState<Record<string, number>>({});
-  const [reelsMuted, setReelsMuted] = useState<boolean>(false);
+  const [reelsMuted, setReelsMuted] = useState<boolean>(true);
   const [fullscreenReel, setFullscreenReel] = useState<boolean>(false);
   const [reelsSuccessToast, setReelsSuccessToast] = useState<string | null>(null);
   
@@ -221,7 +221,7 @@ export default function GamingSection({
   const [cinemaVideo, setCinemaVideo] = useState<any | null>(null);
   const cinemaVideoRef = useRef<HTMLVideoElement>(null);
   const [cinemaPlaying, setCinemaPlaying] = useState(false);
-  const [cinemaMuted, setCinemaMuted] = useState(false);
+  const [cinemaMuted, setCinemaMuted] = useState(true);
   const [cinemaVolume, setCinemaVolume] = useState(0.8);
   const [cinemaDuration, setCinemaDuration] = useState(0);
   const [cinemaCurrentTime, setCinemaCurrentTime] = useState(0);
@@ -511,7 +511,7 @@ export default function GamingSection({
     }
     setCinemaVideo(video);
     setCinemaPlaying(true);
-    setCinemaMuted(false);
+    setCinemaMuted(true);
     setCinemaVolume(0.8);
     setCinemaCurrentTime(0);
   };
@@ -1917,7 +1917,7 @@ export default function GamingSection({
                 {highlightStories[activeStoryIndex].type === 'video' ? (
                   getYoutubeId(highlightStories[activeStoryIndex].mediaUrl) ? (
                     <iframe
-                      src={getYoutubeEmbedUrl(highlightStories[activeStoryIndex].mediaUrl, true, false, false)}
+                      src={getYoutubeEmbedUrl(highlightStories[activeStoryIndex].mediaUrl, true, reelsMuted, false)}
                       className="w-[140%] h-[120%] border-0 pointer-events-none scale-105"
                       allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                       allowFullScreen
@@ -1930,7 +1930,7 @@ export default function GamingSection({
                       className="w-full h-full object-cover"
                       autoPlay
                       playsInline
-                      muted={false}
+                      muted={reelsMuted}
                       onEnded={() => {
                         if (activeStoryIndex < highlightStories.length - 1) {
                           setActiveStoryIndex(activeStoryIndex + 1);
@@ -2336,6 +2336,7 @@ export default function GamingSection({
                         ) : (
                           <video
                             src={item.videoUrl}
+                            poster={item.posterUrl || undefined}
                             preload="metadata"
                             className="w-full h-full object-cover transition-all animate-none"
                             muted

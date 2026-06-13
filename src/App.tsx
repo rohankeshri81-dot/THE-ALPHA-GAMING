@@ -868,6 +868,18 @@ export default function App() {
                     <p className="text-xs text-zinc-400 leading-relaxed mt-4 font-light">
                       Heavy iron weights training colosseum equipped with bespoke veteran coaching support, advanced cardiovascular sensors, locker systems, and full biometric tracking.
                     </p>
+
+                    <div className="mt-4 pt-4 border-t border-zinc-900 flex items-center gap-2">
+                      <span className="text-[10px] font-mono text-zinc-500 uppercase tracking-widest">📞 Gym Contact:</span>
+                      <a 
+                        href="tel:7003008536" 
+                        onClick={(e) => e.stopPropagation()} 
+                        className="text-xs font-mono font-bold text-amber-400 hover:underline"
+                        title="Click to call on mobile devices"
+                      >
+                        7003008536
+                      </a>
+                    </div>
                   </div>
 
                   <div className="pt-8">
@@ -928,6 +940,16 @@ export default function App() {
                     <p className="text-xxs text-zinc-500 mt-2 leading-relaxed">
                       Heavy power colosseum, premium trainer assistance, biometric tracking.
                     </p>
+                    <div className="mt-2 text-[10px] font-mono text-zinc-500 flex items-center gap-1">
+                      <span>📞 Gym Contact:</span>
+                      <a 
+                        href="tel:7003008536" 
+                        onClick={(e) => e.stopPropagation()} 
+                        className="text-amber-400 font-bold hover:underline"
+                      >
+                        7003008536
+                      </a>
+                    </div>
                   </div>
                   <div className="text-[10px] font-mono uppercase text-amber-500 font-bold tracking-wider pt-4 inline-flex items-center gap-1">
                     <span>Apply Gym Membership</span>
@@ -1206,6 +1228,10 @@ export default function App() {
                 
                 <div className="space-y-1.5">
                   <span className="text-[8px] text-zinc-650 block uppercase tracking-widest">HOTLINES TELEPHONY</span>
+                  <div>
+                    <span className="text-zinc-500 font-mono">📞 Gym Contact: </span>
+                    <a href="tel:7003008536" className="text-zinc-200 hover:text-amber-400 font-extrabold pb-0.5">7003008536</a>
+                  </div>
                   <div>
                     <span className="text-zinc-500 font-mono">Library Cell: </span>
                     <a href="tel:+919341152967" className="text-zinc-200 hover:text-amber-400 font-extrabold">+91 9341152967</a>
@@ -1521,6 +1547,7 @@ export default function App() {
                     disabled={!cartCheckoutName.trim() || cartCheckoutMobile.trim().length < 10}
                     onClick={() => {
                       setShowCartPayment(true);
+                      setIsCartOpen(false); // Close cart popup/drawer automatically!
                     }}
                     className="w-full py-3.5 bg-gradient-to-r from-amber-400 to-yellow-600 hover:from-amber-300 hover:to-yellow-500 disabled:from-zinc-900 disabled:to-zinc-900 disabled:border-zinc-850 border border-transparent disabled:text-zinc-500 text-black font-semibold text-xxs font-mono uppercase tracking-wider rounded-xl transition-all shadow-md flex items-center justify-center space-x-2 cursor-pointer"
                   >
@@ -1537,7 +1564,10 @@ export default function App() {
       {/* ----------------- GLOBAL UNIFIED CART PAYMENT MODAL ----------------- */}
       <PaymentModal
         isOpen={showCartPayment}
-        onClose={() => setShowCartPayment(false)}
+        onClose={() => {
+          setShowCartPayment(false);
+          setIsCartOpen(true); // Cart remains available if closed/cancelled
+        }}
         amount={cartSubtotals.grandTotal}
         itemName="SECURE COMBINED CLUB PASSAGE"
         category="gaming" // Leverages Cart Booking list rendering Support
@@ -1570,6 +1600,7 @@ export default function App() {
           setIsCartOpen(false);
           clearMasterCart();
           handleBookingSuccess(newBooking);
+          setActiveTab('home'); // Redirect instantly to Homepage
         }}
       />
 

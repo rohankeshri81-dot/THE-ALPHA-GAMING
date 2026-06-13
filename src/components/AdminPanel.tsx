@@ -393,6 +393,8 @@ export default function AdminPanel({
     id: '',
     title: '',
     videoBase64: '',
+    posterBase64: '',
+    posterUrl: '',
     isFeatured: false,
     loop: true,
     isActive: true
@@ -1208,8 +1210,23 @@ export default function AdminPanel({
       const isEdit = !!videoForm.id;
       const endpoint = isEdit ? '/api/admin/gaming-highlights/videos/update' : '/api/admin/gaming-highlights/videos/add';
       const body = isEdit 
-        ? { id: videoForm.id, title: videoForm.title, isFeatured: videoForm.isFeatured, loop: videoForm.loop, isActive: videoForm.isActive, videoBase64: videoForm.videoBase64 || undefined }
-        : { title: videoForm.title, isFeatured: videoForm.isFeatured, loop: videoForm.loop, videoBase64: videoForm.videoBase64 };
+        ? { 
+            id: videoForm.id, 
+            title: videoForm.title, 
+            isFeatured: videoForm.isFeatured, 
+            loop: videoForm.loop, 
+            isActive: videoForm.isActive, 
+            videoBase64: videoForm.videoBase64 || undefined,
+            posterBase64: videoForm.posterBase64 || undefined,
+            posterUrl: videoForm.posterUrl || undefined
+          }
+        : { 
+            title: videoForm.title, 
+            isFeatured: videoForm.isFeatured, 
+            loop: videoForm.loop, 
+            videoBase64: videoForm.videoBase64,
+            posterBase64: videoForm.posterBase64 || undefined
+          };
 
       const res = await fetch(endpoint, {
         method: 'POST',
@@ -1220,8 +1237,8 @@ export default function AdminPanel({
       if (res.ok) {
         const data = await res.json();
         setAdminHighlights(prev => ({ ...prev, videos: data.videos || prev.videos }));
-        alert(isEdit ? "Success: Video details updated!" : "Success: New Gameplay video deployed to stage!");
-        setVideoForm({ id: '', title: '', videoBase64: '', isFeatured: false, loop: true, isActive: true });
+        alert(isEdit ? "Success: Gaming video poster & specifications updated in Supabase pool!" : "Success: New Gameplay video deployed to stage!");
+        setVideoForm({ id: '', title: '', videoBase64: '', posterBase64: '', posterUrl: '', isFeatured: false, loop: true, isActive: true });
         onRefreshData();
       } else {
         const data = await res.json();
@@ -4041,6 +4058,57 @@ export default function AdminPanel({
                     </div>
                   </div>
 
+                  <div>
+                    <label className="block text-[10px] font-mono uppercase tracking-wider text-zinc-400 mb-1.5">Video Poster / Cover Image</label>
+                    <div 
+                      className="border-2 border-dashed border-zinc-800 hover:border-zinc-700 bg-zinc-900/40 p-5 rounded-2xl text-center space-y-2 cursor-pointer transition-colors relative"
+                      onDragOver={(e) => e.preventDefault()}
+                      onDrop={(e) => {
+                        e.preventDefault();
+                        if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                          const reader = new FileReader();
+                          reader.onloadend = () => {
+                            setVideoForm(prev => ({ ...prev, posterBase64: reader.result as string }));
+                          };
+                          reader.readAsDataURL(e.dataTransfer.files[0]);
+                        }
+                      }}
+                      onClick={() => document.getElementById('admin_video_poster_file_selector')?.click()}
+                    >
+                      <input
+                        type="file"
+                        id="admin_video_poster_file_selector"
+                        accept=".jpg,.jpeg,.png,.webp"
+                        className="hidden"
+                        onChange={(e) => {
+                          if (e.target.files && e.target.files[0]) {
+                            const reader = new FileReader();
+                            reader.onloadend = () => {
+                              setVideoForm(prev => ({ ...prev, posterBase64: reader.result as string }));
+                            };
+                            reader.readAsDataURL(e.target.files[0]);
+                          }
+                        }}
+                      />
+                      {videoForm.posterBase64 || videoForm.posterUrl ? (
+                        <div className="space-y-2">
+                          <img 
+                            src={videoForm.posterBase64 || videoForm.posterUrl} 
+                            alt="Poster Preview" 
+                            className="h-28 mx-auto object-cover rounded-lg border border-zinc-900" 
+                          />
+                          <p className="text-[10px] text-amber-500 font-mono text-center">✓ Poster Loaded. Click to Replace Poster</p>
+                        </div>
+                      ) : (
+                        <div className="space-y-1 py-4 text-zinc-500">
+                          <Upload className="w-5 h-5 text-zinc-700 mx-auto mb-1" />
+                          <p className="text-[11px] font-medium text-zinc-450">Drag & Drop or Click to browse</p>
+                          <p className="text-[9px] text-zinc-650">Supported: JPG, PNG, WEBP</p>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+
                   <div className="flex flex-col gap-2 bg-zinc-950/25 p-3.5 border border-zinc-900 rounded-xl space-y-1">
                     <div className="flex items-center gap-2">
                       <input
@@ -4077,15 +4145,15 @@ export default function AdminPanel({
                     <button
                       type="submit"
                       id="admin_video_submit_btn"
-                      className="flex-1 py-2.5 bg-amber-500 hover:bg-amber-600 text-black font-semibold rounded-xl text-xxs uppercase tracking-wider cursor-pointer font-bold"
+                      className="flex-1 py-2.5 bg-amber-500 hover:bg-amber-600 text-black font-semibold rounded-xl text-xxs uppercase tracking-wider cursor-pointer font-bold animate-pulse hover:animate-none"
                     >
-                      {videoForm.id ? "Edit Video Title" : "Upload Video"}
+                      {videoForm.id ? "Save Changes" : "Upload Video"}
                     </button>
                     {videoForm.id && (
                       <button
                         type="button"
                         id="admin_video_cancel_btn"
-                        onClick={() => setVideoForm({ id: '', title: '', videoBase64: '', isFeatured: false, loop: true, isActive: true })}
+                        onClick={() => setVideoForm({ id: '', title: '', videoBase64: '', posterBase64: '', posterUrl: '', isFeatured: false, loop: true, isActive: true })}
                         className="px-4 py-2.5 bg-zinc-900 hover:bg-zinc-800 text-zinc-400 rounded-xl text-xxs uppercase cursor-pointer"
                       >
                         Cancel
@@ -4386,17 +4454,23 @@ export default function AdminPanel({
                               setVideoForm({
                                 id: v.id,
                                 title: v.title,
-                                videoBase64: '', // leave empty to not upload new by default unless changed
+                                videoBase64: '', 
+                                posterBase64: '',
+                                posterUrl: v.posterUrl || '',
                                 isFeatured: v.isFeatured === true,
                                 loop: v.loop !== false,
                                 isActive: v.isActive !== false
                               });
                               // Scroll form into view
-                              document.getElementById('admin_video_title_input')?.focus();
+                              const el = document.getElementById('admin_video_form_title');
+                              if (el) {
+                                el.focus();
+                                el.scrollIntoView({ behavior: 'smooth' });
+                              }
                             }}
                             className="px-2.5 py-1.5 bg-zinc-950 border border-zinc-900 text-zinc-300 rounded-lg hover:text-white font-semibold uppercase text-[8px]"
                           >
-                            Edit Video Title
+                            Edit Features & Poster
                           </button>
 
                           <button

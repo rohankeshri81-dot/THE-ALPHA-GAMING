@@ -313,15 +313,21 @@ export default function PaymentModal({
     if (isOpen && didInit && !hasAutoOpened && currentStep === 'checkout_confirm') {
       const pName = payerName.trim() || userName.trim();
       const pMobile = payerMobile.trim() || userMobile.trim();
-      if (pName && pMobile && pMobile.length >= 10 && computedAmount > 0) {
+      const finalAmt = computedAmount > 0 ? computedAmount : amount;
+      const isDirectBooking = !!categoryDetails?.gamingDetails?.isCartBooking || category === 'tournament' || !!categoryDetails?.tournamentDetails;
+      if (pName && pMobile && pMobile.length >= 10 && finalAmt > 0) {
         setHasAutoOpened(true);
-        const timer = setTimeout(() => {
-          handleRazorpayCheckout();
-        }, 350);
-        return () => clearTimeout(timer);
+        if (isDirectBooking) {
+          handleRazorpayCheckout(pName, pMobile, finalAmt);
+        } else {
+          const timer = setTimeout(() => {
+            handleRazorpayCheckout(pName, pMobile, finalAmt);
+          }, 350);
+          return () => clearTimeout(timer);
+        }
       }
     }
-  }, [isOpen, didInit, hasAutoOpened, currentStep, payerName, payerMobile, computedAmount]);
+  }, [isOpen, didInit, hasAutoOpened, currentStep, payerName, payerMobile, computedAmount, amount, categoryDetails, category]);
 
   useEffect(() => {
     if (didInit) {
@@ -599,17 +605,21 @@ export default function PaymentModal({
     }
   };
 
-  const handleRazorpayCheckout = async () => {
+  const handleRazorpayCheckout = async (directName?: string, directMobile?: string, directAmount?: number) => {
     try {
-      if (!payerName.trim()) {
+      const finalName = (directName || payerName || userName || "").trim();
+      const finalMobile = (directMobile || payerMobile || userMobile || "").trim();
+      const finalAmount = directAmount !== undefined ? directAmount : (payableAmount > 0 ? payableAmount : (computedAmount > 0 ? computedAmount : amount));
+
+      if (!finalName) {
         setErrorMessage("Customer name is required before starting checkout.");
         return;
       }
-      if (!payerMobile.trim() || payerMobile.trim().length < 10) {
+      if (!finalMobile || finalMobile.length < 10) {
         setErrorMessage("A valid 10-digit mobile number is required before starting checkout.");
         return;
       }
-      if (payableAmount <= 0) {
+      if (finalAmount <= 0) {
         setErrorMessage("Please select a service with a valid amount.");
         return;
       }
@@ -619,7 +629,7 @@ export default function PaymentModal({
       setCurrentStep('processing');
 
       // 1. Create order on the backend
-      const amountInPaise = Math.round(payableAmount * 100);
+      const amountInPaise = Math.round(finalAmount * 100);
       const receiptId = generateReceiptId();
 
       const orderResponse = await fetch('/api/create-order', {
@@ -654,9 +664,9 @@ export default function PaymentModal({
         image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?q=80&w=120&auto=format&fit=crop',
         order_id: order_id,
         prefill: {
-          name: payerName,
+          name: finalName,
           email: userEmail || 'guest@thealpha.com',
-          contact: payerMobile,
+          contact: finalMobile,
         },
         theme: {
           color: '#c5a059',
@@ -694,17 +704,17 @@ export default function PaymentModal({
             const bookingPayload = {
               userId,
               userEmail,
-              userName: payerName || userName || 'Valued Alpha Member',
-              userMobile: payerMobile || userMobile || '0000000000',
+              userName: finalName,
+              userMobile: finalMobile,
               category: currentCategory,
               planId: selectedService.toLowerCase().replace(/\s+/g, '_'),
               planName: selectedService,
-              amount: payableAmount,
+              amount: finalAmount,
               paymentMethod: 'razorpay',
               paymentStatus: 'success', // Instantly marked as success
               utrNumber: response.razorpay_payment_id,
-              payerName: payerName || userName || 'Valued Alpha Member',
-              payerMobile: payerMobile || userMobile || '0000000000',
+              payerName: finalName,
+              payerMobile: finalMobile,
               screenshotUrl: '',
               receiptNumber: receiptId,
               razorpay_order_id: response.razorpay_order_id,
@@ -749,8 +759,8 @@ export default function PaymentModal({
 
             const receiptData = {
               receiptId: receiptId,
-              name: payerName || userName || 'Valued Alpha Member',
-              mobile: payerMobile || userMobile || '0000000000',
+              name: finalName,
+              mobile: finalMobile,
               email: userEmail || 'guest@thealpha.com',
               memberId: userId || 'N/A',
               service: selectedService,
@@ -762,8 +772,8 @@ export default function PaymentModal({
                 : undefined,
               quantity: 1,
               discount: 0,
-              baseAmount: payableAmount,
-              amount: payableAmount,
+              baseAmount: finalAmount,
+              amount: finalAmount,
               orderId: response.razorpay_order_id || 'N/A',
               paymentId: response.razorpay_payment_id,
               utr: response.razorpay_payment_id,
@@ -776,7 +786,7 @@ export default function PaymentModal({
             const bookingDataForCallback = result.booking || {
               ...bookingPayload,
               id: result.bookingId || 'bk_' + Math.random().toString(36).substring(2, 9),
-              totalAmount: payableAmount,
+              totalAmount: finalAmount,
               paymentDate: new Date().toISOString()
             };
 
@@ -805,6 +815,11 @@ export default function PaymentModal({
             console.log('Razorpay modal dismissed by user.');
             setIsRazorpayLoading(false);
             setCurrentStep('cancelled');
+            const isDirectBooking = !!categoryDetails?.gamingDetails?.isCartBooking || category === 'tournament' || !!categoryDetails?.tournamentDetails;
+            if (isDirectBooking) {
+              alert("Payment Cancelled: The transaction was cancelled or dismissed.");
+              onClose();
+            }
           }
         }
       };
@@ -813,9 +828,15 @@ export default function PaymentModal({
       
       rzp.on('payment.failed', (resp: any) => {
         console.error('Razorpay payment failed callback:', resp.error);
-        setErrorMessage(resp.error?.description || 'Razorpay Gateway payment transaction failed.');
+        const errMsg = resp.error?.description || 'Razorpay Gateway payment transaction failed.';
+        setErrorMessage(errMsg);
         setIsRazorpayLoading(false);
         setCurrentStep('failed');
+        const isDirectBooking = !!categoryDetails?.gamingDetails?.isCartBooking || category === 'tournament' || !!categoryDetails?.tournamentDetails;
+        if (isDirectBooking) {
+          alert("Payment Failed: " + errMsg);
+          onClose();
+        }
       });
 
       rzp.open();
@@ -829,8 +850,13 @@ export default function PaymentModal({
   };
 
   const isProceedDisabled = !selectedService || payableAmount <= 0;
+  const isDirectBooking = !!categoryDetails?.gamingDetails?.isCartBooking || category === 'tournament' || !!categoryDetails?.tournamentDetails;
 
   if (!isOpen) return null;
+
+  if (isDirectBooking && (currentStep === 'checkout_confirm' || currentStep === 'processing')) {
+    return null;
+  }
 
   return (
     <div id="payment_modal_overlay" className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/95 backdrop-blur-md">

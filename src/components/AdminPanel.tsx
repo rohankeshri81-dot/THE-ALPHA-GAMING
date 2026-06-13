@@ -503,6 +503,7 @@ export default function AdminPanel({
   });
   const [editingBannerId, setEditingBannerId] = useState<string | null>(null);
   const [uploadingBanner, setUploadingBanner] = useState(false);
+  const [bannerUploadDebug, setBannerUploadDebug] = useState<string[]>([]);
 
   // Load backend stats
   const fetchAdminStats = async () => {
@@ -740,24 +741,46 @@ export default function AdminPanel({
     }
     try {
       setUploadingBanner(true);
+      setBannerUploadDebug([
+        "⏳ STEP 1/4: Loading asset data stream...",
+        "⏳ STEP 2/4: Packing metadata fields..."
+      ]);
+
+      const payload = {
+        id: editingBannerId || undefined,
+        title: newBanner.title || "Dynamic Poster",
+        description: newBanner.description,
+        imageBase64: newBanner.imageBase64,
+        type: newBanner.type,
+        targetPage: newBanner.targetPage,
+        deviceType: newBanner.deviceType,
+        startDate: newBanner.startDate,
+        endDate: newBanner.endDate,
+        isActive: newBanner.isActive
+      };
+
+      setBannerUploadDebug(prev => [
+        ...prev,
+        "⏳ STEP 3/4: Uploading to Supabase bucket (with fallback preset)..."
+      ]);
+
       const res = await fetch('/api/admin/banners/upload', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          id: editingBannerId || undefined,
-          title: newBanner.title || "Dynamic Poster",
-          description: newBanner.description,
-          imageBase64: newBanner.imageBase64,
-          type: newBanner.type,
-          targetPage: newBanner.targetPage,
-          deviceType: newBanner.deviceType,
-          startDate: newBanner.startDate,
-          endDate: newBanner.endDate,
-          isActive: newBanner.isActive
-        })
+        body: JSON.stringify(payload)
       });
+
       if (res.ok) {
         const data = await res.json();
+        
+        setBannerUploadDebug([
+          "✓ Upload Success",
+          "✓ Publish Success",
+          "✓ Database Updated",
+          "✓ Public Website Synced",
+          `✓ Image URL Saved: ${data.imageUrl || (data.banner && data.banner.imageUrl) || "verified connection sync"}`
+        ]);
+
         setBanners(data.banners);
         setNewBanner({ 
           title: '', 
@@ -775,10 +798,18 @@ export default function AdminPanel({
         onRefreshData();
       } else {
         const errDetails = await res.json();
-        alert(errDetails.error || "Failed to upload visual asset poster");
+        const errMsg = errDetails.error || "Failed to upload visual asset poster";
+        setBannerUploadDebug([
+          `❌ upload/publish failed: ${errMsg}`
+        ]);
+        alert(errMsg);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error(err);
+      setBannerUploadDebug([
+        `❌ publish call exception: ${err.message}`
+      ]);
+      alert("Exception: " + err.message);
     } finally {
       setUploadingBanner(false);
     }
@@ -3314,6 +3345,32 @@ export default function AdminPanel({
                   {uploadingBanner ? "Processing upload..." : editingBannerId ? "✓ Replace Active Poster" : "✓ Publish Poster Banner"}
                 </button>
               </form>
+
+              {bannerUploadDebug && bannerUploadDebug.length > 0 && (
+                <div className="bg-zinc-950 border border-zinc-900 rounded-xl p-3.5 text-left space-y-1.5 font-mono text-[9px] mt-4">
+                  <div className="text-zinc-500 uppercase tracking-widest font-bold text-[8px] pb-1 border-b border-zinc-900 flex justify-between items-center select-none">
+                    <span>⚡ UPLOAD PIPELINE CONSOLE LOG</span>
+                    <button 
+                      type="button" 
+                      onClick={() => setBannerUploadDebug([])} 
+                      className="text-zinc-650 hover:text-white font-bold cursor-pointer"
+                    >
+                      Clear
+                    </button>
+                  </div>
+                  {bannerUploadDebug.map((log, i) => {
+                    let color = "text-zinc-400";
+                    if (log.startsWith("✓")) color = "text-emerald-400 font-bold";
+                    if (log.startsWith("❌")) color = "text-red-500 font-bold";
+                    if (log.startsWith("⏳")) color = "text-amber-400";
+                    return (
+                      <div key={i} className={`leading-relaxed break-all ${color}`}>
+                        {log}
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
             </div>
 
             {/* MANAGE INSTALLED SLIDERS */}

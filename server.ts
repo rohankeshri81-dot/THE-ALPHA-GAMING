@@ -113,6 +113,39 @@ async function initializeSupabaseTable() {
     -- Ensure RLS is active on alpha_admins
     ALTER TABLE public.alpha_admins ENABLE ROW LEVEL SECURITY;
 
+    -- Create alpha_banners table
+    CREATE TABLE IF NOT EXISTS public.alpha_banners (
+      id TEXT PRIMARY KEY,
+      title TEXT,
+      description TEXT,
+      banner_image_url TEXT,
+      type TEXT,
+      target_page TEXT,
+      is_active BOOLEAN DEFAULT true,
+      uploaded_at TIMESTAMPTZ DEFAULT now(),
+      updated_at TIMESTAMPTZ DEFAULT now()
+    );
+
+    ALTER TABLE public.alpha_banners ADD COLUMN IF NOT EXISTS title TEXT;
+    ALTER TABLE public.alpha_banners ADD COLUMN IF NOT EXISTS description TEXT;
+    ALTER TABLE public.alpha_banners ADD COLUMN IF NOT EXISTS banner_image_url TEXT;
+    ALTER TABLE public.alpha_banners ADD COLUMN IF NOT EXISTS type TEXT;
+    ALTER TABLE public.alpha_banners ADD COLUMN IF NOT EXISTS target_page TEXT;
+    ALTER TABLE public.alpha_banners ADD COLUMN IF NOT EXISTS is_active BOOLEAN DEFAULT true;
+    ALTER TABLE public.alpha_banners ADD COLUMN IF NOT EXISTS device_type TEXT;
+    ALTER TABLE public.alpha_banners ADD COLUMN IF NOT EXISTS schedule_start_date TEXT;
+    ALTER TABLE public.alpha_banners ADD COLUMN IF NOT EXISTS schedule_end_date TEXT;
+    ALTER TABLE public.alpha_banners ADD COLUMN IF NOT EXISTS uploaded_at TIMESTAMPTZ DEFAULT now();
+    ALTER TABLE public.alpha_banners ADD COLUMN IF NOT EXISTS updated_at TIMESTAMPTZ DEFAULT now();
+
+    -- Ensure Row Level Security (RLS) is active
+    ALTER TABLE public.alpha_banners ENABLE ROW LEVEL SECURITY;
+
+    -- Standard Supabase Storage Bucket setup via SQL
+    INSERT INTO storage.buckets (id, name, public)
+    VALUES ('banners', 'banners', true)
+    ON CONFLICT (id) DO NOTHING;
+
     -- Drop any old/different policies to prevent duplicate or conflict errors
     DROP POLICY IF EXISTS "Allow public insert to alpha_bookings" ON public.alpha_bookings;
     DROP POLICY IF EXISTS "Allow public insert to payment_receipts" ON public.payment_receipts;
@@ -124,6 +157,14 @@ async function initializeSupabaseTable() {
     DROP POLICY IF EXISTS "Allow public test delete from payment_receipts" ON public.payment_receipts;
     DROP POLICY IF EXISTS "Allow public select on alpha_admins" ON public.alpha_admins;
     DROP POLICY IF EXISTS "Allow public insert on alpha_admins" ON public.alpha_admins;
+    DROP POLICY IF EXISTS "Allow public insert to alpha_banners" ON public.alpha_banners;
+    DROP POLICY IF EXISTS "Allow public select to alpha_banners" ON public.alpha_banners;
+    DROP POLICY IF EXISTS "Allow public update to alpha_banners" ON public.alpha_banners;
+    DROP POLICY IF EXISTS "Allow public delete from alpha_banners" ON public.alpha_banners;
+    DROP POLICY IF EXISTS "Public Access Banners Bucket" ON storage.objects;
+    DROP POLICY IF EXISTS "Public Insert Banners Bucket" ON storage.objects;
+    DROP POLICY IF EXISTS "Public Update Banners Bucket" ON storage.objects;
+    DROP POLICY IF EXISTS "Public Delete Banners Bucket" ON storage.objects;
 
     -- Create highly permissive RLS policies to allow inserts/selects/deletes on all roles (anon, public, authenticated)
     CREATE POLICY "Allow public insert to alpha_bookings" ON public.alpha_bookings FOR INSERT TO anon, authenticated, public WITH CHECK (true);
@@ -134,6 +175,16 @@ async function initializeSupabaseTable() {
     CREATE POLICY "Allow public test delete from payment_receipts" ON public.payment_receipts FOR DELETE TO anon, authenticated, public USING (true);
     CREATE POLICY "Allow public select on alpha_admins" ON public.alpha_admins FOR SELECT TO anon, authenticated, public USING (true);
     CREATE POLICY "Allow public insert on alpha_admins" ON public.alpha_admins FOR INSERT TO anon, authenticated, public WITH CHECK (true);
+    CREATE POLICY "Allow public insert to alpha_banners" ON public.alpha_banners FOR INSERT TO anon, authenticated, public WITH CHECK (true);
+    CREATE POLICY "Allow public select to alpha_banners" ON public.alpha_banners FOR SELECT TO anon, authenticated, public USING (true);
+    CREATE POLICY "Allow public update to alpha_banners" ON public.alpha_banners FOR UPDATE TO anon, authenticated, public USING (true);
+    CREATE POLICY "Allow public delete from alpha_banners" ON public.alpha_banners FOR DELETE TO anon, authenticated, public USING (true);
+    
+    -- Buckets public authorization policies
+    CREATE POLICY "Public Access Banners Bucket" ON storage.objects FOR SELECT TO anon, authenticated, public USING (bucket_id = 'banners');
+    CREATE POLICY "Public Insert Banners Bucket" ON storage.objects FOR INSERT TO anon, authenticated, public WITH CHECK (bucket_id = 'banners');
+    CREATE POLICY "Public Update Banners Bucket" ON storage.objects FOR UPDATE TO anon, authenticated, public WITH CHECK (bucket_id = 'banners');
+    CREATE POLICY "Public Delete Banners Bucket" ON storage.objects FOR DELETE TO anon, authenticated, public USING (bucket_id = 'banners');
 
     -- Notify PostgREST to reload schema cache
     NOTIFY pgrst, 'reload schema';
@@ -167,8 +218,9 @@ const _dirname = typeof __dirname !== "undefined" ? __dirname : path.dirname(_fi
 const app = express();
 const PORT = 3000;
 
-// Enable JSON parsing
-app.use(express.json());
+// Enable JSON and URL-encoded parsing with increased payload limits
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // Database file setup
 const DB_PATH = path.join(process.cwd(), "database.json");
@@ -1962,9 +2014,133 @@ app.post("/api/admin/cafe/menu/delete", async (req, res) => {
   res.json({ message: "Menu item structural deletion successful", cafeMenu: DB.cafeMenu });
 });
 
+// Helper to upload base64 images directly to Supabase Storage bucket ('banners') with adaptive mime types
+async function uploadToSupabaseStorage(id: string, imageBase64: string): Promise<string> {
+  if (!imageBase64 || imageBase64.startsWith("http")) {
+    return imageBase64;
+  }
+  
+  try {
+    let mimeType = "image/jpeg";
+    let base64Content = imageBase64;
+    let ext = "jpg";
+    
+    if (imageBase64.startsWith("data:")) {
+      const parts = imageBase64.split(";base64,");
+      if (parts.length === 2) {
+         mimeType = parts[0].substring(5);
+         base64Content = parts[1];
+         const rawExt = mimeType.split("/")[1];
+         if (rawExt) ext = rawExt;
+      }
+    }
+    
+    const buffer = Buffer.from(base64Content, 'base64');
+    const fileName = `banner_${id}_${Date.now()}.${ext}`;
+    
+    console.log(`[SUPABASE STORAGE] Standardizing mimeType as ${mimeType}, fileName as ${fileName}`);
+    
+    const { data: uploadData, error: uploadErr } = await supabase.storage
+      .from('banners')
+      .upload(fileName, buffer, {
+        contentType: mimeType,
+        upsert: true
+      });
+      
+    if (uploadErr) {
+       console.error("[SUPABASE STORAGE UPLOAD DIRECT ERROR]", uploadErr.message);
+       throw uploadErr;
+    }
+    
+    const { data: urlData } = supabase.storage.from('banners').getPublicUrl(fileName);
+    console.log("[SUPABASE STORAGE SUCCESS] Uploaded to public URL:", urlData.publicUrl);
+    return urlData.publicUrl;
+  } catch (err: any) {
+    console.warn("[SUPABASE STORAGE FAIL] Falling back to Cloudinary:", err.message);
+    return await uploadToCloudinary(imageBase64);
+  }
+}
+
+// Helper to query and get the latest unified active banner listings from Supabase (with memory fallback)
+async function getLatestBannersList(): Promise<any[]> {
+  try {
+    const { data, error } = await supabase
+      .from('alpha_banners')
+      .select('*')
+      .order('uploaded_at', { ascending: false });
+      
+    if (!error && data && data.length > 0) {
+      return data.map((b: any) => ({
+        id: b.id,
+        title: b.title || "Dynamic Poster",
+        description: b.description || "",
+        imageUrl: b.banner_image_url,
+        type: b.type,
+        targetPage: b.target_page || "homepage",
+        isActive: b.is_active,
+        deviceType: b.device_type || 'all',
+        scheduleStartDate: b.schedule_start_date || '',
+        scheduleEndDate: b.schedule_end_date || '',
+        createdAt: b.uploaded_at,
+        updatedAt: b.updated_at
+      }));
+    }
+  } catch (err: any) {
+    console.error("[GET LATEST BANNERS EXCEPTION]", err.message);
+  }
+  return DB.banners || [];
+}
+
+// Initial synchronizer to insert preloaded banners from memory/JSON into Supabase if missing
+async function syncDatabaseBannersToSupabase() {
+  try {
+    console.log("[SUPABASE SYNC] Syncing local seeded/stored banners to Supabase table 'alpha_banners'...");
+    const { data: supaBanners, error } = await supabase.from('alpha_banners').select('id');
+    if (error) {
+      console.warn("[SUPABASE SYNC NOTICE] Could not query table 'alpha_banners', skipping sync.");
+      return;
+    }
+    const supaIds = new Set((supaBanners || []).map((b: any) => b.id));
+    
+    const localBanners = DB.banners || [];
+    for (const b of localBanners) {
+      if (!supaIds.has(b.id)) {
+        console.log(`[SUPABASE SYNC] Seeding banner '${b.title}' (${b.id}) to Supabase...`);
+        await supabase.from('alpha_banners').insert([{
+          id: b.id,
+          title: b.title,
+          description: b.description || "",
+          banner_image_url: b.imageUrl,
+          type: b.type,
+          target_page: b.targetPage || "homepage",
+          is_active: b.isActive !== undefined ? !!b.isActive : true,
+          device_type: b.deviceType || "all",
+          schedule_start_date: b.scheduleStartDate || "",
+          schedule_end_date: b.scheduleEndDate || "",
+          uploaded_at: b.createdAt || new Date().toISOString(),
+          updated_at: new Date().toISOString()
+        }]);
+      }
+    }
+    console.log("[SUPABASE SYNC DONE] Banners synced successfully to Supabase!");
+  } catch (err: any) {
+    console.error("[SUPABASE SYNC EXCEPTION] Failed to sync local banners", err.message);
+  }
+}
+
 // Banner Endpoints
-app.get("/api/banners", (req, res) => {
-  res.json(DB.banners || []);
+app.get("/api/banners", async (req, res) => {
+  try {
+    res.setHeader("Cache-Control", "no-cache, no-store, must-revalidate");
+    res.setHeader("Pragma", "no-cache");
+    res.setHeader("Expires", "0");
+
+    const mapped = await getLatestBannersList();
+    return res.json(mapped);
+  } catch (err: any) {
+    console.error("[GET BANNERS ENDPOINT EXCEPTION]", err.message);
+    res.json(DB.banners || []);
+  }
 });
 
 app.post("/api/admin/banners/upload", async (req, res) => {
@@ -1988,51 +2164,72 @@ app.post("/api/admin/banners/upload", async (req, res) => {
     return res.status(400).json({ error: "Missing imageBase64 or type" });
   }
 
-  // Identify if any ID is supplied for updating/replacing
   const finalReplaceId = id || replaceBannerId;
+  const finalId = finalReplaceId || "b_" + Math.random().toString(36).substring(2, 9);
 
   try {
-    const uploadedUrl = await uploadToCloudinary(imageBase64);
+    console.log(`[POST /api/admin/banners/upload] Beginning upload stream for id: ${finalId}`);
+    const uploadedUrl = await uploadToSupabaseStorage(finalId, imageBase64);
     
+    console.log(`[POST /api/admin/banners/upload] Image uploaded successfully. Public URI: ${uploadedUrl}`);
+
     const bannerData = {
+      id: finalId,
       title: title || "New Dynamic Poster",
       description: description || "",
       imageUrl: uploadedUrl,
-      type, // 'homepage' | 'gaming' | 'cafe' | 'tournament' | 'offer' | 'gym' | 'library' | 'festival'
+      type, 
       targetPage: targetPage || "homepage",
-      deviceType: deviceType || "all", // 'all' | 'desktop' | 'mobile'
+      deviceType: deviceType || "all", 
       scheduleStartDate: startDate || scheduleStartDate || "",
       scheduleEndDate: endDate || scheduleEndDate || "",
       isActive: isActive !== undefined ? !!isActive : true,
       createdAt: new Date().toISOString()
     };
 
+    // Keep DB.banners array in sync as local fallback
     DB.banners = DB.banners || [];
-
     if (finalReplaceId) {
-      // OVERWRITE existing banner
-      DB.banners = DB.banners.map((b: any) => {
-        if (b.id === finalReplaceId) {
-          return {
-            ...b,
-            ...bannerData
-          };
-        }
-        return b;
-      });
-      saveDatabase();
-      res.json({ message: "Banner replaced successfully", bannerId: finalReplaceId, banners: DB.banners });
+      DB.banners = DB.banners.map((b: any) => b.id === finalReplaceId ? { ...b, ...bannerData } : b);
     } else {
-      // APPEND new banner
-      const newBanner = {
-        id: "b_" + Math.random().toString(36).substring(2, 9),
-        ...bannerData
-      };
-      DB.banners.push(newBanner);
-      saveDatabase();
-      res.status(201).json({ message: "Banner catalogued successfully", banner: newBanner, banners: DB.banners });
+      DB.banners.push(bannerData);
     }
+    saveDatabase();
+
+    // Persist completely to Supabase table
+    const supabasePayload = {
+      id: finalId,
+      title: bannerData.title,
+      description: bannerData.description,
+      banner_image_url: bannerData.imageUrl,
+      type: bannerData.type,
+      target_page: bannerData.targetPage,
+      is_active: bannerData.isActive,
+      device_type: bannerData.deviceType,
+      schedule_start_date: bannerData.scheduleStartDate,
+      schedule_end_date: bannerData.scheduleEndDate,
+      uploaded_at: bannerData.createdAt,
+      updated_at: new Date().toISOString()
+    };
+
+    console.log(`[POST /api/admin/banners/upload] Saving to Supabase DB for id: ${finalId}...`);
+    const { error: sError } = await supabase.from('alpha_banners').upsert([supabasePayload]);
+    if (sError) {
+      console.error("[SUPABASE SAVE FAILURE] Could not upsert to alpha_banners table:", sError.message);
+      return res.status(500).json({ error: "Failed to persist banner metadata to Supabase structure: " + sError.message });
+    }
+
+    console.log("[SUPABASE SAVE SUCCESS] Successfully saved banner to alpha_banners table:", finalId);
+    
+    const latestBannersList = await getLatestBannersList();
+    res.json({ 
+      message: "Banner processed and published successfully", 
+      banner: bannerData, 
+      imageUrl: uploadedUrl,
+      banners: latestBannersList 
+    });
   } catch (e: any) {
+    console.error("[UPLOAD API EXCEPTION]", e.message);
     res.status(500).json({ error: e.message || "Failed to process image upload" });
   }
 });
@@ -2045,7 +2242,20 @@ app.post("/api/admin/banners/delete", async (req, res) => {
 
   DB.banners = (DB.banners || []).filter((b: any) => b.id !== id);
   saveDatabase();
-  res.json({ message: "Banner deleted successfully", banners: DB.banners });
+
+  try {
+    const { error: delErr } = await supabase.from('alpha_banners').delete().eq('id', id);
+    if (delErr) {
+      console.warn("[SUPABASE DELETE WARNING] Could not delete banner from Supabase:", delErr.message);
+    } else {
+      console.log("[SUPABASE DELETE SUCCESS] Deleted banner from alpha_banners table:", id);
+    }
+  } catch (err: any) {
+    console.error("Supabase delete banner exception:", err.message);
+  }
+
+  const latestBannersList = await getLatestBannersList();
+  res.json({ message: "Banner deleted successfully", banners: latestBannersList });
 });
 
 app.post("/api/admin/banners/set-active", async (req, res) => {
@@ -2070,7 +2280,36 @@ app.post("/api/admin/banners/set-active", async (req, res) => {
   });
 
   saveDatabase();
-  res.json({ message: "Banner configurations updated successfully", banners: DB.banners });
+
+  try {
+    const b = DB.banners.find((x: any) => x.id === id);
+    if (b) {
+      const { error: updateErr } = await supabase.from('alpha_banners').upsert([{
+        id: b.id,
+        title: b.title,
+        description: b.description,
+        banner_image_url: b.imageUrl,
+        type: b.type,
+        target_page: b.targetPage,
+        is_active: b.isActive,
+        device_type: b.deviceType,
+        schedule_start_date: b.scheduleStartDate,
+        schedule_end_date: b.scheduleEndDate,
+        uploaded_at: b.createdAt,
+        updated_at: new Date().toISOString()
+      }]);
+      if (updateErr) {
+        console.warn("[SUPABASE SET ACTIVE WARNING] Upsert failed for active adjustment:", updateErr.message);
+      } else {
+        console.log("[SUPABASE SET ACTIVE SUCCESS] Adjusted banner state in Supabase:", id);
+      }
+    }
+  } catch (err: any) {
+    console.error("Supabase active state exception:", err.message);
+  }
+
+  const latestBannersList = await getLatestBannersList();
+  res.json({ message: "Banner configurations updated successfully", banners: latestBannersList });
 });
 
 // -----------------------------------------------------
@@ -3050,6 +3289,13 @@ app.post("/api/verify-payment", (req, res) => {
 async function startServer() {
   // Initialize Supabase Tables and check connection
   await initializeSupabaseTable();
+  
+  // Sync preloaded/seeded/locally configured banners with the Supabase banner table
+  try {
+    await syncDatabaseBannersToSupabase();
+  } catch (syncErr: any) {
+    console.error("[BANNER INITIAL SYNCHRONIZATION FAILURE]", syncErr.message);
+  }
 
   // Automatically seed/re-authenticate master administrator account
   try {

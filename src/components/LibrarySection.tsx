@@ -10,6 +10,7 @@ import {
   FileText,
   Lock,
   Calendar,
+  Globe,
   UserPlus
 } from 'lucide-react';
 import PaymentModal from './PaymentModal';
@@ -36,6 +37,17 @@ export default function LibrarySection({
   removeFromMasterCart,
   openCartDrawer
 }: LibrarySectionProps) {
+  // Banner transition slide state
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    if (!banners || banners.length <= 1) return;
+    const interval = setInterval(() => {
+      setCurrentSlide(prev => (prev >= banners.length - 1 ? 0 : prev + 1));
+    }, 4500);
+    return () => clearInterval(interval);
+  }, [banners]);
+
   // Seats status
   const [seats, setSeats] = useState<Seat[]>([]);
   const [selectedSeatNumber, setSelectedSeatNumber] = useState<string>('');
@@ -206,36 +218,59 @@ export default function LibrarySection({
   return (
     <div id="library_section_container" className="py-2.5 space-y-8">
       {/* LIBRARY SPECIFIC CAMPAIGN BANNERS */}
-      {banners && banners.length > 0 && (
-        <div className="relative w-full h-[180px] sm:h-[260px] border border-zinc-900 rounded-3xl overflow-hidden shadow-xl bg-zinc-950 animate-fade-in">
-          <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10 pointer-events-none"></div>
-          {banners.map((b, i) => {
-            return (
-              <div key={b.id || i} className="absolute inset-0 w-full h-full">
-                <img 
-                  src={b.imageUrl} 
-                  alt={b.title} 
-                  className="w-full h-full object-cover" 
-                  referrerPolicy="no-referrer"
-                />
-                <div className="absolute bottom-4 left-6 z-20 text-left max-w-xl">
-                  {b.type && (
-                    <span className="px-2 py-0.5 bg-amber-500 text-black text-[8px] font-mono font-bold rounded uppercase tracking-wider block w-fit mb-1 shadow">
-                      {b.type.toUpperCase()} CAMPAIGN
-                    </span>
-                  )}
-                  <h3 className="text-sm sm:text-base font-display font-black text-white uppercase tracking-wide">{b.title}</h3>
-                  {b.description && (
-                    <p className="text-[10px] text-zinc-300 font-sans leading-relaxed line-clamp-2">
-                      {b.description}
-                    </p>
-                  )}
-                </div>
+      <div id="library_section_banners_hub" className="relative w-full h-[180px] sm:h-[260px] border border-zinc-900 rounded-3xl overflow-hidden shadow-xl bg-zinc-950 animate-fade-in w-full">
+        <div className="absolute inset-0 bg-gradient-to-t from-black via-black/40 to-transparent z-10 pointer-events-none"></div>
+        {banners && banners.length > 0 ? (
+          banners.map((b, idx) => (
+            <div 
+              key={b.id || idx} 
+              className={`absolute inset-0 w-full h-full transition-all duration-700 ${
+                idx === currentSlide ? 'opacity-100 scale-100 z-10' : 'opacity-0 scale-95 z-0 pointer-events-none'
+              }`}
+            >
+              <img 
+                src={`${b.imageUrl}${b.imageUrl.includes('?') ? '&' : '?'}v=${b.updatedAt ? encodeURIComponent(b.updatedAt) : Date.now()}`} 
+                alt={b.title} 
+                className="w-full h-full object-cover" 
+                referrerPolicy="no-referrer"
+              />
+              <div className="absolute bottom-4 left-6 z-20 text-left max-w-xl">
+                {b.type && (
+                  <span className="px-2 py-0.5 bg-amber-500 text-black text-[8px] font-mono font-bold rounded uppercase tracking-wider block w-fit mb-1 shadow font-mono">
+                    {b.type.toUpperCase()} CAMPAIGN
+                  </span>
+                )}
+                <h3 className="text-sm sm:text-base font-display font-black text-white uppercase tracking-wide">{b.title}</h3>
+                {b.description && (
+                  <p className="text-[10px] text-zinc-300 font-sans leading-relaxed line-clamp-2">
+                    {b.description}
+                  </p>
+                )}
               </div>
-            );
-          })}
-        </div>
-      )}
+            </div>
+          ))
+        ) : (
+          // System fallback default study banner
+          <div className="absolute inset-0 w-full h-full">
+            <img 
+              src="https://images.unsplash.com/photo-1507842217343-583bb7270b66?auto=format&fit=crop&q=80&w=1200" 
+              alt="Premium Library Cabinets" 
+              className="w-full h-full object-cover opacity-30" 
+              referrerPolicy="no-referrer"
+            />
+            <div className="absolute inset-0 bg-gradient-to-t from-zinc-950 via-zinc-950/50 to-transparent pointer-events-none"></div>
+            <div className="absolute bottom-4 left-6 z-20 text-left max-w-xl">
+              <span className="px-2 py-0.5 bg-amber-500 text-black text-[8px] font-mono font-bold rounded uppercase tracking-wider block w-fit mb-1 shadow animate-pulse font-mono">
+                PRIMARY PORTAL NOTICE
+              </span>
+              <h3 className="text-sm sm:text-base font-display font-black text-white uppercase tracking-wide">PREMIUM SILENT READING & CONDUCIVE STUDY ENVIRONMENT</h3>
+              <p className="text-[10px] text-zinc-300 font-sans leading-relaxed font-light">
+                Secure double-cabin personal reservation slots. Raw high-speed fiber channels & sound insulated environments calibrated for extreme exam preparations.
+              </p>
+            </div>
+          </div>
+        )}
+      </div>
 
       {/* Description Headers */}
       <div className="text-center max-w-xl mx-auto space-y-3">
@@ -245,6 +280,12 @@ export default function LibrarySection({
         <h2 className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl">
           THE ALPHA <span className="text-amber-400">LIBRARY</span>
         </h2>
+        <div className="inline-flex flex-wrap justify-center gap-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-amber-500/10 border border-amber-500/20 rounded-full text-amber-400 text-xxs font-mono tracking-wider uppercase font-bold">
+            <span>📞 Library Contact:</span>
+            <a href="tel:7003008536" className="underline hover:text-white transition-colors">7003008536</a>
+          </div>
+        </div>
         <p className="text-xs text-zinc-400 font-sans tracking-wide leading-relaxed">
           Premium quiet study space with dedicated personal desks and lockable biometric storage units.
         </p>

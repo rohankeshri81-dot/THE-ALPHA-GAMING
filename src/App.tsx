@@ -345,8 +345,6 @@ export default function App() {
 
   // Filter banners based on layout schedules and screen sizes
   const getFilteredBanners = (targetPageName: string) => {
-    if (targetPageName === 'homepage') return [];
-
     return banners.filter(b => {
       // IsActive checking
       if (!b.isActive) return false;
@@ -377,6 +375,10 @@ export default function App() {
         const keywords = ['mocktail', 'cafe', 'food', 'beverage', 'drink', 'refreshment', 'tea', 'coffee', 'cocktail', 'deluxe cafe', 'dine', 'dining', 'recipe', 'beverages', 'juices', 'menu', 'shake', 'smoothie'];
         return keywords.some(keyword => title.includes(keyword) || desc.includes(keyword) || type.includes(keyword) || target.includes(keyword));
       })();
+
+      if (targetPageName === 'homepage') {
+        return b.targetPage === 'homepage' || b.type === 'homepage' || b.targetPage === 'offer' || b.type === 'offer' || b.targetPage === 'festival' || b.type === 'festival';
+      }
 
       if (targetPageName === 'gym') {
         if (isCafeMocktailContent) return false;
@@ -894,6 +896,103 @@ export default function App() {
                 </motion.div>
 
               </div>
+
+              {/* INTERACTIVE CONTACT US BENTO GRID SECTION */}
+              <div 
+                id="home_interactive_bento_grid" 
+                className="pt-16 border-t border-zinc-900 grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch"
+              >
+                {/* BENTO FORM: INQUIRY FORM (SPAN 7) */}
+                <div className="lg:col-span-7 bg-zinc-950/80 border border-zinc-900 rounded-3xl p-8 flex flex-col justify-between shadow-xl">
+                  <div className="space-y-4">
+                    <div className="flex items-center space-x-2.5">
+                      <div className="w-2 h-2 rounded-full bg-amber-500 animate-pulse"></div>
+                      <span className="text-[10px] font-mono tracking-widest text-[#c5a059] uppercase">TRANSMIT CUSTOM INQUIRIES</span>
+                    </div>
+                    
+                    <h2 className="font-display text-2xl font-bold text-white uppercase tracking-wider">
+                      CONTACT THE ALPHA HELPDESK
+                    </h2>
+                    
+                    <p className="text-xs text-zinc-400 font-sans leading-relaxed">
+                      Have questions regarding slot availabilities, special equipment configurations, customized protein beverages, or corporate subscriptions? Dispatch your inquiry directly below.
+                    </p>
+                    
+                    <HelpDeskContactForm />
+                  </div>
+                </div>
+
+                {/* BENTO RADAR: INTERACTIVE LOCATION RADAR (SPAN 5) */}
+                <div className="lg:col-span-5 bg-zinc-950/80 border border-zinc-900 rounded-3xl p-8 flex flex-col justify-between hover:border-amber-500/30 transition-all shadow-xl relative overflow-hidden group">
+                  <div className="space-y-5 flex-grow">
+                    <div className="flex items-center space-x-2.5">
+                      <MapPin className="w-4 h-4 text-amber-500" />
+                      <span className="text-[10px] font-mono tracking-widest text-[#c5a059] uppercase">INTERACTIVE COORDS RADAR</span>
+                    </div>
+
+                    <h2 className="font-display text-2xl font-bold text-white uppercase tracking-wider">
+                      SATELLITE POSITION
+                    </h2>
+
+                    {/* INTUITIVE MAP BOX */}
+                    <div className="border border-zinc-900 rounded-2xl overflow-hidden h-[240px] relative w-full bg-zinc-950 focus-within:ring-1 focus-within:ring-amber-500/20 transition-all">
+                      <iframe 
+                        title="THE ALPHA GAMING & CAFE Location Map"
+                        src="https://maps.google.com/maps?q=25.788611,87.529722(THE%20ALPHA%20GAMING%20%26%20CAFE)&t=&z=16&ie=UTF8&iwloc=&output=embed"
+                        className="w-full h-full border-0 opacity-80 hover:opacity-100 transition-opacity" 
+                        allowFullScreen={true} 
+                        loading="lazy"
+                        referrerPolicy="no-referrer-when-downgrade"
+                      ></iframe>
+                    </div>
+
+                    {/* ADDRESS ELEMENT & VERIFICATION DETAILS */}
+                    <div className="bg-black/60 border border-zinc-900 rounded-2xl p-4 space-y-2 text-left">
+                      <div className="flex items-center space-x-2">
+                        <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse"></span>
+                        <h4 className="text-xs font-bold text-white font-mono uppercase tracking-wider">THE ALPHA GAMING & CAFE</h4>
+                      </div>
+                      <p className="text-xs text-zinc-400 font-sans leading-relaxed">
+                        2nd Floor, SBI Building, Sanoli Chowk, Above The Alpha Gym & Fitness, Gulabbagh, Bihar 854326, India
+                      </p>
+                      <div className="text-[10px] text-zinc-500 font-mono flex flex-col gap-1 border-t border-zinc-900 pt-2.5 mt-1">
+                        <div className="flex justify-between">
+                          <span>PLUS CODE</span>
+                          <span className="text-amber-450 font-bold">QGQH+9X Gulabbagh, India</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span>LAT/LNG POSITION</span>
+                          <span className="text-zinc-400 font-bold">25.788611° N, 87.529722° E</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* DOUBLE ACTION ROUTING CONTROL SLATE */}
+                  <div className="grid grid-cols-2 gap-4 pt-6">
+                    <a 
+                      id="btn-directions-bento"
+                      href="https://www.google.com/maps/search/?api=1&query=25.788611,87.529722"
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="py-3 bg-[#c5a059] hover:bg-[#dfc288] text-black rounded-xl flex items-center justify-center space-x-1.5 text-[10px] font-mono font-bold uppercase tracking-widest transition-all shadow-md cursor-pointer hover:scale-[1.02]"
+                    >
+                      <ArrowRight className="w-3.5 h-3.5" />
+                      <span>Get Directions</span>
+                    </a>
+                    <a 
+                      id="btn-viewmaps-bento"
+                      href="https://maps.google.com/?q=25.788611,87.529722"
+                      target="_blank" 
+                      rel="noreferrer"
+                      className="py-3 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-zinc-355 hover:text-white rounded-xl flex items-center justify-center space-x-1.5 text-[10px] font-mono font-bold uppercase tracking-widest transition-all shadow-md cursor-pointer hover:scale-[1.02]"
+                    >
+                      <Globe className="w-3.5 h-3.5 text-zinc-500 group-hover:text-amber-500 transition-colors" />
+                      <span>View on Maps</span>
+                    </a>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           )}
 
@@ -1219,10 +1318,10 @@ export default function App() {
                 <div className="space-y-1">
                   <span className="text-[8px] text-zinc-650 block uppercase tracking-widest">OUTPOST LANDMARKS</span>
                   <p className="font-light leading-normal">
-                    2nd Floor, Above SBI (SME Branch) &amp; The Alpha Gym,<br />
-                    Opposite Hotel Grand Palace,<br />
-                    Sanoli Chowk, Gulabbagh,<br />
-                    Purnea, Bihar – 854326
+                    2nd Floor, SBI Building,<br />
+                    Sanoli Chowk,<br />
+                    Above The Alpha Gym &amp; Fitness,<br />
+                    Gulabbagh, Bihar – 854326, India
                   </p>
                 </div>
                 
@@ -1233,12 +1332,12 @@ export default function App() {
                     <a href="tel:7003008536" className="text-zinc-200 hover:text-amber-400 font-extrabold pb-0.5">7003008536</a>
                   </div>
                   <div>
-                    <span className="text-zinc-500 font-mono">Library Cell: </span>
-                    <a href="tel:+919341152967" className="text-zinc-200 hover:text-amber-400 font-extrabold">+91 9341152967</a>
+                    <span className="text-zinc-500 font-mono font-bold">Official Contact: </span>
+                    <a href="tel:7003008536" className="text-amber-400 hover:text-amber-300 font-extrabold">7003008536</a>
                   </div>
                   <div>
                     <span className="text-zinc-500 font-mono">Gaming Arena: </span>
-                    <a href="tel:+919472835855" className="text-zinc-200 hover:text-amber-400 font-extrabold">+91 9472835855</a>
+                    <a href="tel:7003008536" className="text-zinc-200 hover:text-amber-400 font-extrabold">7003008536</a>
                   </div>
                 </div>
 
@@ -1256,23 +1355,47 @@ export default function App() {
               <h4 className="text-[10px] font-mono tracking-widest text-[#f5f5f5] uppercase font-bold">EMBEDDED COORDS MAP</h4>
               <div className="border border-zinc-900 rounded-2xl overflow-hidden h-[120px] relative w-full bg-zinc-950">
                 <iframe 
-                  title="The Alpha Location Map"
-                  src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3593.748641470438!2d87.514083!3d25.778841!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x39eff96aa8ca4711%3A0xe54e5884bbbb552e!2sSanoli%20Chowk%2C%20Gulabbagh%2C%20Purnea%2C%20Bihar%20854326!5e0!3m2!1sen!2sin!4v1717612000000!5m2!1sen!2sin" 
+                  title="The Alpha Location Map Footer"
+                  src="https://maps.google.com/maps?q=25.788611,87.529722(THE%20ALPHA%20GAMING%20%26%20CAFE)&t=&z=15&ie=UTF8&iwloc=&output=embed"
                   className="w-full h-full border-0 opacity-80 hover:opacity-100 transition-opacity" 
                   allowFullScreen={true} 
                   loading="lazy"
                   referrerPolicy="no-referrer-when-downgrade"
                 ></iframe>
               </div>
-              <a 
-                href="https://maps.google.com/?q=The+Alpha+Gym,+Above+SBI+SME+Branch,+Sanoli+Chowk,+Gulabbagh,+Purnea,+Bihar+854326"
-                target="_blank" 
-                rel="noreferrer"
-                className="w-full py-2.5 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-zinc-300 hover:text-white rounded-xl flex items-center justify-center space-x-2 text-xxs font-mono uppercase tracking-widest transition-all shadow-md"
-              >
-                <MapPin className="w-3.5 h-3.5 text-amber-500" />
-                <span>Get Directions Radar</span>
-              </a>
+              <div className="space-y-2">
+                <div className="text-[10px] font-bold text-white uppercase tracking-wider font-mono">
+                  THE ALPHA GAMING & CAFE
+                </div>
+                <div className="text-[10.5px] text-zinc-500 leading-normal font-sans">
+                  2nd Floor, SBI Building, Sanoli Chowk, Above The Alpha Gym &amp; Fitness, Gulabbagh, Bihar 854326, India
+                </div>
+                <div className="text-[9px] text-zinc-650 font-mono">
+                  GPS: 25.788611, 87.529722 | Plus Code: QGQH+9X
+                </div>
+              </div>
+              <div className="grid grid-cols-2 gap-2 mt-2">
+                <a 
+                  id="footer-btn-directions"
+                  href="https://www.google.com/maps/search/?api=1&query=25.788611,87.529722"
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="py-2 bg-[#c5a059] hover:bg-[#dfc288] text-black rounded-lg flex items-center justify-center space-x-1 text-[9px] font-mono font-bold uppercase tracking-wider transition-all"
+                >
+                  <ArrowRight className="w-3 h-3" />
+                  <span>Directions</span>
+                </a>
+                <a 
+                  id="footer-btn-viewmaps"
+                  href="https://maps.google.com/?q=25.788611,87.529722"
+                  target="_blank" 
+                  rel="noreferrer"
+                  className="py-2 bg-zinc-900 hover:bg-zinc-850 border border-zinc-800 text-zinc-300 hover:text-white rounded-lg flex items-center justify-center space-x-1 text-[9px] font-mono font-bold uppercase tracking-wider transition-all"
+                >
+                  <Globe className="w-3 h-3 text-zinc-500 hover:text-amber-500" />
+                  <span>View Map</span>
+                </a>
+              </div>
             </div>
 
           </div>

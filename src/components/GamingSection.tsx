@@ -36,6 +36,7 @@ import {
   Heart,
   Share2,
   ChevronUp,
+  Globe,
   ChevronDown
 } from 'lucide-react';
 import PaymentModal from './PaymentModal';
@@ -943,14 +944,11 @@ export default function GamingSection({
       {/* VISUAL BRAND HEADER */}
       <div className="text-center max-w-2xl mx-auto space-y-3 animate-fade-in">
         <div className="inline-flex items-center justify-center w-12 h-12 bg-amber-500/10 border border-amber-500/20 text-amber-500 rounded-full mb-2">
-          <Gamepad2 className="w-6 h-6 animate-bounce" />
+          <Gamepad2 className="w-6 h-6" />
         </div>
         <h2 className="font-display text-3xl font-bold tracking-tight text-white sm:text-4xl uppercase">
           THE ALPHA <span className="text-amber-400">GAMING ZONE</span>
         </h2>
-        <p className="text-xs text-zinc-400 font-sans tracking-wide leading-relaxed">
-          The ultimate next-gen gaming stadium. Featuring high-definition PS5 Play & Pay hubs, premium dual-sense controls, and cozy lounge setups.
-        </p>
       </div>
 
       {/* MODERN DYNAMIC DESIGN CAROUSEL */}
@@ -965,7 +963,7 @@ export default function GamingSection({
                 }`}
               >
                 <img
-                  src={b.imageUrl}
+                  src={`${b.imageUrl}${b.imageUrl.includes('?') ? '&' : '?'}v=${b.updatedAt ? encodeURIComponent(b.updatedAt) : Date.now()}`}
                   alt={b.title}
                   className="w-full h-full object-cover"
                   referrerPolicy="no-referrer"
